@@ -23,17 +23,11 @@
             font-family: "sloop-script-three", sans-serif;
             font-weight: 400;
             font-style: normal;
-
             color: #fff;
             overflow-x: hidden;
         }
 
-        /* Scroll spacer — gives us scroll distance to drive the animation */
-        #scroll-spacer {
-            height: 300vh;
-        }
-
-        /* ── Fixed background video ─────────────────────────────────────── */
+        /* ── Background video ────────────────────────────────────────────── */
         #bg-video {
             position: fixed;
             inset: 0;
@@ -47,15 +41,48 @@
             transform: scale(1.05);
         }
 
-        /* ── SVG logo — positioned entirely by JS ───────────────────────── */
+        /* ── SVG logo ────────────────────────────────────────────────────── */
         #svg-logo {
             position: fixed;
             z-index: 10;
-            pointer-events: none;
             will-change: width, top, left;
         }
 
-        /* ── Product section ────────────────────────────────────────────── */
+        /* ── Top nav ─────────────────────────────────────────────────────── */
+        #top-nav {
+            position: fixed;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9;
+            display: flex;
+            gap: 3rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .nav-btn {
+            font-family: "sloop-script-three", sans-serif;
+            font-weight: 500;
+            color: #000;
+            font-size: 2.3rem;
+            text-decoration: none;
+            cursor: pointer;
+            -webkit-text-stroke: 0.2px #fff;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            -webkit-text-stroke: 1px #fff;
+        }
+
+        /* ── Scroll spacer (home only) ───────────────────────────────────── */
+        #scroll-spacer {
+            height: 300vh;
+        }
+
+        /* ── Product section (home) ──────────────────────────────────────── */
         #product-section {
             position: fixed;
             inset: 0;
@@ -67,7 +94,6 @@
             opacity: 0;
             pointer-events: none;
             padding-top: 30px;
-            /* clear the logo at the top */
         }
 
         .img-perspective {
@@ -91,36 +117,231 @@
             }
         }
 
-        /* ── Purchase button ────────────────────────────────────────────── */
         .purchase-btn {
             display: inline-block;
             margin-top: 1rem;
             padding: 14px 56px;
-            color: #fff;
+            color: #000;
             font-size: 5rem;
-            letter-spacing: 0rem;
             text-decoration: none;
             font-family: inherit;
             background: transparent;
             cursor: pointer;
-            opacity: 1;
+            -webkit-text-stroke: 0.5px #fff;
             transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         .purchase-btn:hover {
-            background: rgba(255, 255, 255);
-            color: #000;
+            -webkit-text-stroke: 1px #fff;
             border-color: transparent;
+        }
+
+        /* ── Shop view ───────────────────────────────────────────────────── */
+        #view-shop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 5;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #view-shop.active {
+            display: flex;
+        }
+
+        #coming-soon h1 {
+            font-family: "sloop-script-three", sans-serif;
+            font-size: clamp(4rem, 12vw, 12rem);
+            color: #fff;
+            font-weight: 400;
+            text-align: center;
+            -webkit-text-stroke: 1px #000;
+        }
+
+        /* ── Gallery view ────────────────────────────────────────────────── */
+        #view-gallery {
+            display: none;
+            position: relative;
+            z-index: 5;
+        }
+
+        #view-gallery.active {
+            display: block;
+        }
+
+        #gallery-section {
+            position: relative;
+            z-index: 5;
+            padding: 210px 40px 80px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: transparent;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.06);
+        }
+
+        @media (max-width: 960px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #gallery-section {
+                padding: 180px 16px 60px;
+            }
+        }
+
+        /* ── Lightbox ────────────────────────────────────────────────────── */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #lightbox-img {
+            max-width: 88vw;
+            max-height: 88vh;
+            object-fit: contain;
+            display: block;
+            transition: opacity 0.15s ease;
+        }
+
+        #lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            font-size: 2.8rem;
+            color: #fff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+            font-family: sans-serif;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        #lightbox-close:hover {
+            opacity: 1;
+        }
+
+        #lightbox-prev,
+        #lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3.5rem;
+            color: #fff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 16px 24px;
+            font-family: sans-serif;
+            user-select: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        #lightbox-prev:hover,
+        #lightbox-next:hover {
+            opacity: 1;
+        }
+
+        #lightbox-prev {
+            left: 12px;
+        }
+
+        #lightbox-next {
+            right: 12px;
+        }
+
+        @media (max-width: 768px) {
+
+            /* Nav buttons smaller */
+            .nav-btn {
+                font-size: 1.4rem;
+            }
+
+            /* Nav closer to logo */
+            #top-nav {
+                top: 80px;
+                gap: 2rem;
+            }
+
+            /* Purchase button smaller */
+            .purchase-btn {
+                font-size: 3rem;
+                padding: 10px 32px;
+            }
+
+            /* Product image smaller */
+            #ephemeral-img {
+                width: clamp(140px, 60vw, 280px);
+            }
+
+            /* Gallery 2 columns */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            /* Less top padding so content isn't buried */
+            #gallery-section {
+                padding: 140px 16px 60px;
+            }
+
+            /* Coming soon smaller */
+            #coming-soon h1 {
+                font-size: clamp(3rem, 10vw, 6rem);
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Drives scroll distance for the animation -->
-    <div id="scroll-spacer"></div>
-
-    <!-- Fixed background video -->
+    <!-- Background video — loads once, plays uninterrupted across all views -->
     <div id="bg-video">
         <video autoplay muted loop playsinline>
             <source src="Ephemeral%20Website%20Video.mov" type="video/mp4">
@@ -128,77 +349,283 @@
         </video>
     </div>
 
-    <!-- SVG logo — starts centered/large, shrinks to top as you scroll -->
-    <img id="svg-logo" src="ephemeral%20svg.svg" alt="Ephemeral">
+    <!-- SVG logo — click returns to home from any view -->
+    <img id="svg-logo" src="Ephemera-Black-cropped.svg" alt="Ephemeral">
 
-    <!-- Product section — fades in once SVG has settled at top -->
+    <!-- Nav -->
+    <div id="top-nav">
+        <a class="nav-btn" data-view="shop">Shop</a>
+        <a class="nav-btn" data-view="gallery">1 of 1 Boards</a>
+    </div>
+
+    <!-- Home: scroll spacer drives the logo animation -->
+    <div id="scroll-spacer"></div>
+
+    <!-- Home: product section -->
     <section id="product-section">
         <div class="img-perspective">
             <img id="ephemeral-img" src="ephemeral.png" alt="Ephemeral">
         </div>
-        <a href="#purchase" class="purchase-btn">Purchase</a>
+        <a class="purchase-btn" data-view="shop">Purchase</a>
     </section>
 
+    <!-- Shop view -->
+    <div id="view-shop">
+        <div id="coming-soon">
+            <h1>Coming Soon</h1>
+        </div>
+    </div>
+
+    <!-- Gallery view -->
+    <div id="view-gallery">
+        <section id="gallery-section">
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </section>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox">
+        <button id="lightbox-close">&#215;</button>
+        <button id="lightbox-prev">&#8249;</button>
+        <img id="lightbox-img" src="" alt="">
+        <button id="lightbox-next">&#8250;</button>
+    </div>
+
     <script>
+        // ── Elements ──────────────────────────────────────────────────────────
         const svgLogo = document.getElementById('svg-logo');
+
+
+
         const productSection = document.getElementById('product-section');
+        const topNav = document.getElementById('top-nav');
+        const scrollSpacer = document.getElementById('scroll-spacer');
+        const viewShop = document.getElementById('view-shop');
+        const viewGallery = document.getElementById('view-gallery');
 
-        // SVG intrinsic aspect ratio from viewBox "0 0 3508 2481"
-        const SVG_ASPECT = 2481 / 3508; // height ÷ width ≈ 0.707
+        let SVG_ASPECT = null; // read from image after load
+        let currentView = 'home';
 
-        // ── Easing ──────────────────────────────────────────────────────────
+        // ── Easing helpers ────────────────────────────────────────────────────
         function easeInOutCubic(t) {
-            return t < 0.5
-                ? 4 * t * t * t
-                : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
         }
-
         function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
         function lerp(a, b, t) { return a + (b - a) * t; }
 
-        // ── Main update ─────────────────────────────────────────────────────
+        // ── Logo: fixed at top (shop / gallery) ───────────────────────────────
+        function positionLogoFixed() {
+            const vw = window.innerWidth;
+            const finalWidth = vw < 768 ? vw * 0.45 : vw * 0.2;
+            svgLogo.style.width = finalWidth + 'px';
+            svgLogo.style.left = ((vw - finalWidth) / 2) + 'px';
+            svgLogo.style.top = '20px';
+        }
+
+        // ── Home scroll animation ─────────────────────────────────────────────
         function update() {
+            if (currentView !== 'home' || SVG_ASPECT === null) return;
+
             const scrollY = window.scrollY;
             const vh = window.innerHeight;
             const vw = window.innerWidth;
 
-            // Phase 1 (0 → 1 viewport height): SVG shrinks from hero to nav logo
             const phase1Raw = clamp(scrollY / vh, 0, 1);
             const phase1 = easeInOutCubic(phase1Raw);
-
-            // Phase 2 (1vh → 1.5vh): product section fades in
             const phase2 = clamp((scrollY - vh) / (vh * 0.5), 0, 1);
 
-            // ── SVG sizing ──────────────────────────────────────────────────
+            // SVG sizing
             const initialWidth = vw * 0.8;
             const initialHeight = initialWidth * SVG_ASPECT;
-            const finalWidth = vw * 0.2;
+            const finalWidth = vw < 768 ? vw * 0.45 : vw * 0.2;
+             const svgWidth = lerp(initialWidth, finalWidth, phase1);
 
-            const svgWidth = lerp(initialWidth, finalWidth, phase1);
-            const svgHeight = svgWidth * SVG_ASPECT;
-
-            // ── SVG position ────────────────────────────────────────────────
-            // Always centered horizontally
+            // SVG position
             const svgLeft = (vw - svgWidth) / 2;
-
-            // Vertical: from screen-center to 14px from top
             const initialTop = (vh - initialHeight) / 2;
-            const finalTop = -10;
-            const svgTop = lerp(initialTop, finalTop, phase1);
+            const svgTop = lerp(initialTop, 20, phase1);
 
             svgLogo.style.width = svgWidth + 'px';
             svgLogo.style.left = svgLeft + 'px';
             svgLogo.style.top = svgTop + 'px';
 
-            // ── Product section ─────────────────────────────────────────────
+            // Product section
             productSection.style.opacity = phase2;
             productSection.style.pointerEvents = phase2 > 0.05 ? 'all' : 'none';
+
+            // Nav
+            const navReady = phase1 > 0.95;
+            topNav.style.opacity = navReady ? 1 : 0;
+            topNav.style.pointerEvents = navReady ? 'all' : 'none';
         }
 
-        // Run immediately + on every scroll / resize
-        update();
+        // ── View switching ────────────────────────────────────────────────────
+        function switchView(view) {
+            currentView = view;
+
+            // Reset shared elements
+            scrollSpacer.style.display = 'none';
+            productSection.style.opacity = '0';
+            productSection.style.pointerEvents = 'none';
+            viewShop.classList.remove('active');
+            viewGallery.classList.remove('active');
+            document.body.style.overflow = 'hidden';
+
+            if (view === 'home') {
+                svgLogo.style.position = 'fixed';
+                topNav.style.position = 'fixed';
+                svgLogo.style.pointerEvents = 'none';
+                svgLogo.style.cursor = 'default';
+                scrollSpacer.style.display = '';
+                document.body.style.overflow = '';
+                window.scrollTo(0, 0);
+                update();
+            } else if (view === 'shop') {
+                viewShop.classList.add('active');
+                svgLogo.style.position = 'fixed';
+                topNav.style.position = 'fixed';
+                svgLogo.style.pointerEvents = 'all';
+                svgLogo.style.cursor = 'pointer';
+                positionLogoFixed();
+                topNav.style.opacity = '1';
+                topNav.style.pointerEvents = 'all';
+            } else if (view === 'gallery') {
+                viewGallery.classList.add('active');
+                document.body.style.overflow = '';
+                window.scrollTo(0, 0);
+
+                svgLogo.style.position = 'absolute';
+                topNav.style.position = 'absolute';
+                svgLogo.style.pointerEvents = 'all';
+                svgLogo.style.cursor = 'pointer';
+                positionLogoFixed();
+                topNav.style.opacity = '1';
+                topNav.style.pointerEvents = 'all';
+            }
+        }
+
+        // ── Nav + purchase button click handlers ──────────────────────────────
+        document.querySelectorAll('[data-view]').forEach(el => {
+            el.addEventListener('click', e => {
+                e.preventDefault();
+                switchView(el.dataset.view);
+            });
+        });
+
+        // ── Gallery data & grid ───────────────────────────────────────────────
+        const photos = [
+            { src: 'gallery%20boards/advent.png', label: 'advent' },
+            { src: 'gallery%20boards/be%20a%20narc.png', label: 'be a narc' },
+            { src: 'gallery%20boards/big%20guy.png', label: 'big guy' },
+            { src: 'gallery%20boards/catropic%20tresstese.png', label: 'catropic tresstese' },
+            { src: 'gallery%20boards/century.png', label: 'century' },
+            { src: 'gallery%20boards/down%20n_%20out.png', label: "down n' out" },
+            { src: 'gallery%20boards/eyes.png', label: 'eyes' },
+            { src: 'gallery%20boards/in%20reflection.png', label: 'in reflection' },
+            { src: 'gallery%20boards/in%20stone.png', label: 'in stone' },
+            { src: 'gallery%20boards/its%20our%20fault.png', label: "it's our fault" },
+            { src: 'gallery%20boards/kate.png', label: 'kate' },
+            { src: 'gallery%20boards/leather.png', label: 'leather' },
+            { src: 'gallery%20boards/lord%20have%20merthy.png', label: 'lord have merthy' },
+            { src: 'gallery%20boards/memories.png', label: 'memories' },
+            { src: 'gallery%20boards/nodus%20tollens.png', label: 'nodus tollens' },
+            { src: 'gallery%20boards/nothing_s%20easy.png', label: "nothing's easy" },
+            { src: 'gallery%20boards/one%20eye%20open.png', label: 'one eye open' },
+            { src: 'gallery%20boards/riley.png', label: 'riley' },
+            { src: 'gallery%20boards/self%20portrait.png', label: 'self portrait' },
+            { src: 'gallery%20boards/smile.png', label: 'smile' },
+            { src: 'gallery%20boards/two%20towers.png', label: 'two towers' },
+        ];
+
+        const grid = document.getElementById('gallery-grid');
+        photos.forEach((photo, i) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.dataset.index = i;
+            const img = document.createElement('img');
+            img.src = photo.src;
+            img.alt = photo.label;
+            img.loading = 'lazy';
+            item.appendChild(img);
+            grid.appendChild(item);
+        });
+
+        // ── Lightbox ──────────────────────────────────────────────────────────
+        let currentIndex = 0;
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(index) {
+            currentIndex = index;
+            lightboxImg.src = photos[index].src;
+            lightboxImg.alt = photos[index].label;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            // Restore overflow for current view
+            document.body.style.overflow = currentView === 'shop' ? 'hidden' : '';
+        }
+
+        function showPhoto(index) {
+            currentIndex = (index + photos.length) % photos.length;
+            lightboxImg.style.opacity = '0';
+            setTimeout(() => {
+                lightboxImg.src = photos[currentIndex].src;
+                lightboxImg.alt = photos[currentIndex].label;
+                lightboxImg.style.opacity = '1';
+            }, 120);
+        }
+
+        grid.addEventListener('click', e => {
+            const item = e.target.closest('.gallery-item');
+            if (item) openLightbox(+item.dataset.index);
+        });
+
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', e => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        document.getElementById('lightbox-prev').addEventListener('click', e => {
+            e.stopPropagation();
+            showPhoto(currentIndex - 1);
+        });
+
+        document.getElementById('lightbox-next').addEventListener('click', e => {
+            e.stopPropagation();
+            showPhoto(currentIndex + 1);
+        });
+
+        document.addEventListener('keydown', e => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') showPhoto(currentIndex - 1);
+            if (e.key === 'ArrowRight') showPhoto(currentIndex + 1);
+        });
+
+        svgLogo.addEventListener('click', () => {
+            if (currentView !== 'home') switchView('home');
+        });
+
+        // ── Init: read real aspect ratio from image, then animate ────────────
+        function initAspect() {
+            SVG_ASPECT = svgLogo.naturalHeight / svgLogo.naturalWidth;
+            update();
+        }
+        if (svgLogo.complete && svgLogo.naturalWidth) {
+            initAspect();
+        } else {
+            svgLogo.addEventListener('load', initAspect);
+        }
         window.addEventListener('scroll', update, { passive: true });
-        window.addEventListener('resize', update, { passive: true });
+        window.addEventListener('resize', () => {
+            if (currentView === 'home') update();
+            else positionLogoFixed();
+        }, { passive: true });
     </script>
 
 </body>

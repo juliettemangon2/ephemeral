@@ -300,13 +300,18 @@
 
             /* Nav buttons smaller */
             .nav-btn {
-                font-size: 1.4rem;
+                font-size: 2.3rem;
+                flex: 1;
+                text-align: center;
+                white-space: nowrap;
+                padding-right: 1.5rem;
             }
 
-            /* Nav closer to logo */
             #top-nav {
                 top: 80px;
-                gap: 2rem;
+                gap: 1.2rem;
+                width: 90%;
+                justify-content: center;
             }
 
             /* Purchase button smaller */
@@ -317,7 +322,7 @@
 
             /* Product image smaller */
             #ephemeral-img {
-                width: clamp(140px, 60vw, 280px);
+                width: clamp(200px, 80vw, 300px);
             }
 
             /* Gallery 2 columns */
@@ -328,7 +333,7 @@
 
             /* Less top padding so content isn't buried */
             #gallery-section {
-                padding: 140px 16px 60px;
+                padding: 160px 16px 60px;
             }
 
             /* Coming soon smaller */
@@ -438,7 +443,7 @@
             const initialWidth = vw * 0.8;
             const initialHeight = initialWidth * SVG_ASPECT;
             const finalWidth = vw < 768 ? vw * 0.45 : vw * 0.2;
-             const svgWidth = lerp(initialWidth, finalWidth, phase1);
+            const svgWidth = lerp(initialWidth, finalWidth, phase1);
 
             // SVG position
             const svgLeft = (vw - svgWidth) / 2;
@@ -514,7 +519,7 @@
 
         // ── Gallery data & grid ───────────────────────────────────────────────
         const photos = [
-            { src: 'gallery%20boards/advent.png', label: 'advent' },
+            { src: 'gallery%20boards/Advent.png', label: 'advent' },
             { src: 'gallery%20boards/be%20a%20narc.png', label: 'be a narc' },
             { src: 'gallery%20boards/big%20guy.png', label: 'big guy' },
             { src: 'gallery%20boards/catropic%20tresstese.png', label: 'catropic tresstese' },
@@ -535,7 +540,7 @@
             { src: 'gallery%20boards/self%20portrait.png', label: 'self portrait' },
             { src: 'gallery%20boards/smile.png', label: 'smile' },
             { src: 'gallery%20boards/two%20towers.png', label: 'two towers' },
-             { src: 'ephemeral.png', label: 'ephemeral' },
+            { src: 'ephemeral.png', label: 'ephemeral' },
         ];
 
         const grid = document.getElementById('gallery-grid');

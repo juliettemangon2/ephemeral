@@ -349,8 +349,7 @@
     <!-- Background video — loads once, plays uninterrupted across all views -->
     <div id="bg-video">
         <video autoplay muted loop playsinline>
-            <source src="Ephemeral%20Website%20Video.mov" type="video/mp4">
-            <source src="Ephemeral%20Website%20Video.mov" type="video/quicktime">
+            <source src="video.mp4" type="video/mp4">
         </video>
     </div>
 
@@ -399,16 +398,13 @@
     <script>
         // ── Elements ──────────────────────────────────────────────────────────
         const svgLogo = document.getElementById('svg-logo');
-
-
-
         const productSection = document.getElementById('product-section');
         const topNav = document.getElementById('top-nav');
         const scrollSpacer = document.getElementById('scroll-spacer');
         const viewShop = document.getElementById('view-shop');
         const viewGallery = document.getElementById('view-gallery');
 
-        let SVG_ASPECT = null; // read from image after load
+        let SVG_ASPECT = null;
         let currentView = 'home';
 
         // ── Easing helpers ────────────────────────────────────────────────────
@@ -445,10 +441,13 @@
             const finalWidth = vw < 768 ? vw * 0.45 : vw * 0.2;
             const svgWidth = lerp(initialWidth, finalWidth, phase1);
 
-            // SVG position
+            // SVG position — clamp initialTop so it never starts above 20px,
+            // and clamp the final value so it never goes above the resting position (20px).
+            const LOGO_TOP = 20;
+            const initialTop = Math.max((vh - initialHeight) / 2, LOGO_TOP);
+            const svgTop = clamp(lerp(initialTop, LOGO_TOP, phase1), LOGO_TOP, initialTop);
+
             const svgLeft = (vw - svgWidth) / 2;
-            const initialTop = (vh - initialHeight) / 2;
-            const svgTop = lerp(initialTop, 20, phase1);
 
             svgLogo.style.width = svgWidth + 'px';
             svgLogo.style.left = svgLeft + 'px';
@@ -468,7 +467,6 @@
         function switchView(view) {
             currentView = view;
 
-            // Reset shared elements
             scrollSpacer.style.display = 'none';
             productSection.style.opacity = '0';
             productSection.style.pointerEvents = 'none';
@@ -571,7 +569,6 @@
 
         function closeLightbox() {
             lightbox.classList.remove('active');
-            // Restore overflow for current view
             document.body.style.overflow = currentView === 'shop' ? 'hidden' : '';
         }
 
@@ -617,7 +614,7 @@
             if (currentView !== 'home') switchView('home');
         });
 
-        // ── Init: read real aspect ratio from image, then animate ────────────
+        // ── Init ──────────────────────────────────────────────────────────────
         function initAspect() {
             SVG_ASPECT = svgLogo.naturalHeight / svgLogo.naturalWidth;
             update();
